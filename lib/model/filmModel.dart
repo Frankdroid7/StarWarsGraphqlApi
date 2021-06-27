@@ -1,3 +1,5 @@
+import 'package:starwars_graphql/model/speciesModel.dart';
+
 class FilmModel {
   String? title;
   int? episodeID;
@@ -17,10 +19,11 @@ class FilmModel {
 
   factory FilmModel.fromJson(Map<String, dynamic> json) {
     return FilmModel(
-        title: json['title'],
-        episodeID: json['episodeID'],
-        director: json['director'],
-        producers: json['producers'].cast<String>(),
-        releaseDate: json['releaseDate']);
+      title: json['title'],
+      episodeID: json['episodeID'],
+      director: json['director'],
+      releaseDate: json['releaseDate'],
+      producers: json['producers'].cast<String>(),
+    );
   }
 }

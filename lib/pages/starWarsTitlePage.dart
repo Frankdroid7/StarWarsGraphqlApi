@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:starwars_graphql/filmModel.dart';
+import 'package:starwars_graphql/model/filmModel.dart';
 import 'package:starwars_graphql/graphQLQuery.dart';
+import 'package:starwars_graphql/model/speciesModel.dart';
 import 'package:starwars_graphql/pages/starsWarsDetailsPage.dart';
 
 class StarWarsTitlePage extends StatelessWidget {
@@ -9,7 +10,7 @@ class StarWarsTitlePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Star Wars Movie'),
+        title: Text('Star Wars Movies'),
       ),
       body: SafeArea(
         child: Query(
@@ -20,14 +21,20 @@ class StarWarsTitlePage extends StatelessWidget {
             FetchMore? fetchMore,
           }) {
             if (result.isLoading) {
-              return Text('Loading...');
+              return CircularProgressIndicator();
             }
             if (result.hasException) {
               print(result.exception);
               return Text(result.exception.toString());
             }
-            print(result.data);
+            List<List<SpeciesModel>> speciesModelList = [];
             List filmList = result.data!['allFilms']['films'];
+            filmList.forEach((element) {
+              List species = element['speciesConnection']['species'];
+              speciesModelList
+                  .add(species.map((e) => SpeciesModel.fromJson(e)).toList());
+            });
+
             List<FilmModel> filmModelList =
                 filmList.map((e) => FilmModel.fromJson(e)).toList();
             return ListView.builder(
@@ -36,12 +43,16 @@ class StarWarsTitlePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return StarsWarsDetailsPage(
-                          filmModel: filmModelList[index],
-                        );
-                      }));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return StarsWarsDetailsPage(
+                              filmModel: filmModelList[index],
+                              speciesModelList: speciesModelList[index],
+                            );
+                          },
+                        ),
+                      );
                     },
                     child: Card(
                       margin: EdgeInsets.all(6),

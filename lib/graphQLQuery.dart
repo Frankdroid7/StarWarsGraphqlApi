@@ -1,16 +1,26 @@
 class GraphQLQuery {
   static String getMovieTitle = """
-  query{
-  allFilms{
-    films{
+ query fetchMovies {
+  allFilms {
+    films {
       title
       episodeID
       director
-      producers,
-      releaseDate,
-      created
+      producers
+      releaseDate
+      episodeID
+      speciesConnection {
+        species {
+          name
+          language
+          designation
+          classification
+          averageLifespan
+        }
+      }
     }
   }
 }
+
   """;
 }

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.frankdroid7.starwars_graphql">
    <application
-        android:label="starwars_graphql"
+        android:label="Starwars Movies"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
